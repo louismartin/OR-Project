@@ -30,19 +30,30 @@
 \pagebreak
 
 \section*{Topic E - Joint representations for images and text}
-\subsubsection*{Multimodal retrieval: image-to-image search, tag-to-image search,
+\subsection*{Multimodal retrieval: image-to-image search, tag-to-image search,
 and image-to-tag search.}
 
+We chose this project for its interesting usage of both visual and textual data.\\
+\subsubsection*{Technical choices}
+We will use \textbf{git} for code versioning, coworking and to be sure we divide the work
+equally. Our language of choice is \textbf{Python}.
 
-We will use git for code versioning, coworking and to be sure we divide the work
-equally. Our language of choice is Python.
+\subsubsection*{Project description (taken from course project description)}
+\textit{Data: Microsoft COCO dataset.}
 
-We chose to work jointly on step 0 and 1 to both be familiar with the subject,
-code, and define clear common objectives.
-Data: Microsoft COCO dataset.
+Automatically producing natural text describing the content of an image is a
+very hard problem. We will investigate joint representations for images and text
+suitable for this task. In particular, we will investigate the canonical
+correlation analysis (CCA) \cite{normalizedcca}, a popular and successful approach for mapping
+visual and textual features to the same latent space. We will experiment with
+canonical correlation analysis on several sources of data to find correlations
+between image features and sentence features.
 
-
-Description (taken from course project description): Automatically producing natural text describing the content of an image is a very hard problem. We will investigate joint representations for images and text suitable for this task. In particular, we will investigate the canonical correlation analysis (CCA) [1], a popular and successful approach for mapping visual and textual features to the same latent space. We will experiment with canonical correlation analysis on several sources of data to find correlations between image features and sentence features.
+\subsubsection*{Work division}
+We chose to work jointly on step 0 and 1 to be both familiar with the subject,
+code, and to have a clear overview of the subject in order to define precise
+common objectives.\\
+\\
 Detailed step-by-step instructions (taken from course project description):
 \begin{enumerate}
   \setcounter{enumi}{-1}
@@ -52,17 +63,22 @@ Detailed step-by-step instructions (taken from course project description):
   \\\textbf{Zaccharie and Louis}
   \item Implement CCA following \cite{normalizedcca}. Show it works on toy synthetic data.
   We will focus only on the standard two-view CCA.
-    \subitem Sample two clouds of points from two different gaussian distributions
-    \subitem Given two mappings from $\mathbf{R}^2$ to $\mathbf{R}^2$, we generate two views out of the main view.
-    \subitem We will apply CCA on this two view representation and try to retrieve the original view.
-  \\\textbf{Zaccharie and Louis}
+    \begin{itemize}
+      \item Sample two clouds of points from two different gaussian distributions
+      \item Given two different mappings $\phi$ and $\psi$ from $\mathbbm{R}^2$
+      to $\mathbbm{R}^2$, we generate two views out of the main view.
+      For example $\phi: (x,y) \mapsto (x+y,x-y)$ and $\psi: (x,y) \mapsto (xy,e^{x+y})$.
+      \item We will apply CCA on this two view representation and try to
+      retrieve the original view.
+    \end{itemize}
+  \textbf{Zaccharie and Louis}
   \item Extract text word representations from the sentences associated with MS COCO data using \cite{word2vec}.
   \\\textbf{Louis}
   \item Extract CNN image representations using \cite{overfeat}.
   \\\textbf{Zaccharie}
   \item Apply CCA on the features extracted in 2. and 3.
   \\\textbf{Zaccharie and Louis}
-  \item Implement a retrieval pipeline using the computed correlations as in [1].
+  \item Implement a retrieval pipeline using the computed correlations as in \cite{normalizedcca}.
     \subitem Tag-to-image search (T2I)
     \textbf{Zaccharie}
     \subitem Image-to-tag search (I2T)
@@ -71,21 +87,29 @@ Detailed step-by-step instructions (taken from course project description):
   \\\textbf{Louis}
   \item Pick 5-10 objects and quantitatively evaluate the results for tag-to-image search using the ground truth object labels provided with MS COCO. Plot a precision recall curve for each object and report average precision (AP).
   \\\textbf{Louis}
-  \item Use the object ground truth for MS COCO to quantitatively evaluate the image-to-tag search as described in section 6.7 of [1], i.e. compute the average precision for all tags ranked number 1, number 2, etc. We will do this on a randomly sampled test set.
+  \item Use the object ground truth for MS COCO to quantitatively evaluate the image-to-tag search as described in section 6.7 of \cite{normalizedcca}, i.e. compute the average precision for all tags ranked number 1, number 2, etc. We will do this on a randomly sampled test set.
   \\\textbf{Zaccharie}
-  \item Quantitatively compare different CNN features, e.g. \cite{overfeat} with \cite{vgg} or even [5].
+  \item Quantitatively compare different CNN features, e.g. \cite{overfeat} with \cite{vgg} or even \cite{deepfilters}.
   \\\textbf{Zaccharie}
+
 \end{enumerate}
 
 
+\begin{thebibliography}{7}
 
-\begin{thebibliography}{9}
-
-  \bibitem{normalizedcca}
-  \bibitem{word2vec}
-  \bibitem{overfeat}
-  \bibitem{vgg}
-
+\bibitem{normalizedcca}
+  \emph{Normalized CCA},
+  \url{http://slazebni.cs.illinois.edu/publications/yunchao_cca13.pdf}
+\bibitem{word2vec}
+  \emph{Word2Vec},
+  \url{http://code.google.com/p/word2vec/}
+\bibitem{overfeat}
+  \emph{Word2Vec},
+  \url{http://code.google.com/p/word2vec/}
+\bibitem{vgg}
+  K. Simonyan, A. Zisserman, Very Deep Convolutional Networks for Large-Scale Image Recognition, 2014
+\bibitem{deepfilters}
+  M. Cimpoi, S. Maji, A. Vedaldi, Deep Filter Banks for Texture Recognition and Segmentation, CVPR 2015.
 \end{thebibliography}
 
 \end{document}
@@ -100,12 +124,3 @@ Detailed step-by-step instructions (taken from course project description):
   1994.
 
 \end{thebibliography}
-
-Papers:
-[1] Normalized CCA: http://slazebni.cs.illinois.edu/publications/yunchao_cca13.pdf
-[2] Word2Vec: http://code.google.com/p/word2vec/
-[3] Overfeat: http://cilvr.nyu.edu/doku.php?id=software:overfeat:start
-[4] K. Simonyan, A. Zisserman, Very Deep Convolutional Networks for Large-Scale Image Recognition, 2014
-[5] M. Cimpoi, S. Maji, A. Vedaldi, Deep Filter Banks for Texture Recognition and Segmentation, CVPR 2015.
-[6] Devlin et al. Exploring Nearest Neighbor Approaches for Image Captioning, 2015.
-[7] Karpathy and Fei Fei, Deep Visual-Semantic Alignments for Generating Image Descriptions, CVPR 2015.
