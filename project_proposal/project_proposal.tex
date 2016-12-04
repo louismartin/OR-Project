@@ -33,12 +33,12 @@
 \subsection*{Multimodal retrieval: image-to-image search, tag-to-image search,
 and image-to-tag search.}
 
-We chose this project for its interesting usage of both visual and textual data.\\
+We chose this project for its interesting combination of visual and textual data.\\
 \subsubsection*{Technical choices}
 We will use \textbf{git} for code versioning, coworking and to be sure we divide the work
 equally. Our language of choice is \textbf{Python}.
 
-\subsubsection*{Project description (taken from course project description)}
+\subsubsection*{Project description (\href{https://docs.google.com/document/d/1Efj_dul7iRcpWMyoVltM_xot4q2QfqkbW58DAR2TuFo/edit}{taken from course project description})}
 \textit{Data: Microsoft COCO dataset.}
 
 Automatically producing natural text describing the content of an image is a
@@ -54,7 +54,7 @@ We chose to work jointly on step 0 and 1 to be both familiar with the subject,
 code, and to have a clear overview of the subject in order to define precise
 common objectives.\\
 \\
-Detailed step-by-step instructions (taken from course project description):
+Detailed step-by-step instructions (\href{https://docs.google.com/document/d/1Efj_dul7iRcpWMyoVltM_xot4q2QfqkbW58DAR2TuFo/edit}{taken from course project description}):
 \begin{enumerate}
   \setcounter{enumi}{-1}
   \item Design the code architecture.\\
@@ -63,6 +63,7 @@ Detailed step-by-step instructions (taken from course project description):
   \\\textbf{Zaccharie and Louis}
   \item Implement CCA following \cite{normalizedcca}. Show it works on toy synthetic data.
   We will focus only on the standard two-view CCA.
+  The synthetic toy data can be generated as follows:
     \begin{itemize}
       \item Sample two clouds of points from two different gaussian distributions
       \item Given two different mappings $\phi$ and $\psi$ from $\mathbbm{R}^2$
@@ -104,12 +105,16 @@ Detailed step-by-step instructions (taken from course project description):
   \emph{Word2Vec},
   \url{http://code.google.com/p/word2vec/}
 \bibitem{overfeat}
-  \emph{Word2Vec},
-  \url{http://code.google.com/p/word2vec/}
+  \emph{Overfeat},
+  \url{http://cilvr.nyu.edu/doku.php?id=software:overfeat:start}
 \bibitem{vgg}
+  \href{http://arxiv.org/pdf/1409.1556.pdf}{}{
   K. Simonyan, A. Zisserman, Very Deep Convolutional Networks for Large-Scale Image Recognition, 2014
+  }
 \bibitem{deepfilters}
+  \href{http://www.robots.ox.ac.uk/~vgg/publications/2015/Cimpoi15/cimpoi15.pdf}{
   M. Cimpoi, S. Maji, A. Vedaldi, Deep Filter Banks for Texture Recognition and Segmentation, CVPR 2015.
+  }
 \end{thebibliography}
 
 \end{document}
