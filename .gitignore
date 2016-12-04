@@ -87,3 +87,7 @@ ENV/
 
 # Rope project settings
 .ropeproject
+*.aux
+*.fdb_latexmk
+*.fls
+*.out
