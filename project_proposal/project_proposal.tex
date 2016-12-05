@@ -9,17 +9,11 @@
 \usepackage{csvsimple}
 \usepackage{multirow}
 \usepackage{microtype}
-
-\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
-\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+\usepackage{titling}
 
 \graphicspath{ {images/} }
 
-\let\oldsection\section
-\renewcommand\section{\clearpage\oldsection}
-
-\newcommand{\specialcell}[2][c]{%
-  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+\setlength{\droptitle}{-8em}
 
 \begin{document}
 
@@ -27,13 +21,12 @@
 \author{Louis Martin and Zaccharie Ramzi}
 
 \maketitle
-\pagebreak
 
-\section*{Topic E - Joint representations for images and text}
-\subsection*{Multimodal retrieval: image-to-image search, tag-to-image search,
+\subsection*{Topic E - Joint representations for images and text}
+\subsubsection*{Multimodal retrieval: image-to-image search, tag-to-image search,
 and image-to-tag search.}
+We chose this project for its interesting combination of visual and textual data.
 
-We chose this project for its interesting combination of visual and textual data.\\
 \subsubsection*{Technical choices}
 We will use \textbf{git} for code versioning, coworking and to be sure we divide the work
 equally. Our language of choice is \textbf{Python}.
