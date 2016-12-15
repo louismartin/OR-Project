@@ -4,3 +4,4 @@ jupyter-console==5.0.0
 jupyter-core==4.2.1
 numpy==1.11.2
 matplotlib==1.5.3
+scikit-learn==0.18.1
