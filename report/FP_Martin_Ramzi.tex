@@ -17,82 +17,49 @@
 \graphicspath{ {images/} }
 
 
-\begin{document}
-
 \title{Joint representations for images and text}
 \author{Louis Martin and Zaccharie Ramzi}
 
+
+\begin{document}
+
 \maketitle
 
-\subsection*{Topic E - Joint representations for images and text}
-\subsubsection*{Multimodal retrieval: image-to-image search, tag-to-image search,
-and image-to-tag search.}
-We chose this project for its interesting combination of visual and textual data.
+% TODO: put this as a subtitle
+Multimodal retrieval: image-to-image search, tag-to-image search,
+and image-to-tag search.
 
-\subsubsection*{Technical choices}
-We will use \textbf{git} for code versioning, coworking and to be sure we divide the work
-equally. Our language of choice is \textbf{Python}.
+\begin{abstract}
+\end{abstract}
 
-\subsubsection*{Project description (\href{https://docs.google.com/document/d/1Efj_dul7iRcpWMyoVltM_xot4q2QfqkbW58DAR2TuFo/edit}{taken from course project description})}
-\textit{Data: Microsoft COCO dataset.}
+\section{Introduction}
 
-Automatically producing natural text describing the content of an image is a
-very hard problem. We will investigate joint representations for images and text
-suitable for this task. In particular, we will investigate the canonical
-correlation analysis (CCA) \cite{normalizedcca}, a popular and successful approach for mapping
-visual and textual features to the same latent space. We will experiment with
-canonical correlation analysis on several sources of data to find correlations
-between image features and sentence features.
+% TODO: cite with "Hotelling et al. (1936)" instead of "[1]"
+Canonical Correlation Analysis (CCA) was first proposed by \cite{originalcca}.
+The objective is to find a common basis between two correlated spaces (two datasets), such that the correletion between the vectors in the new basis is maximized.
+KCCA uses a kernel method to map the initial spaces to higher dimensional spaces before applying CCA. This usually increases the computational power of CCA.
 
-\subsubsection*{Work division}
-We chose to work jointly on step 0 and 1 to be both familiar with the subject,
-code, and to have a clear overview of the subject in order to define precise
-common objectives.\\
-\\
-Detailed step-by-step instructions (\href{https://docs.google.com/document/d/1Efj_dul7iRcpWMyoVltM_xot4q2QfqkbW58DAR2TuFo/edit}{taken in part from course project description}):
-\begin{enumerate}
-  \setcounter{enumi}{-1}
-  \item Design the code architecture.\\
-  We will first create an architecture to divide code into meaningful modules for
-  efficient coworking and code reuse.
-  \\\textbf{Zaccharie and Louis}
-  \item Implement CCA following \cite{normalizedcca}. Show it works on toy synthetic data.
-  We will focus only on the standard two-view CCA.
-  The synthetic toy data can be generated as follows:
-    \begin{itemize}
-      \item Sample two clouds of points from two different gaussian distributions
-      \item Given two different mappings $\phi$ and $\psi$ from $\mathbbm{R}^2$
-      to $\mathbbm{R}^2$, we generate two views out of the main view.
-      For example $\phi: (x,y) \mapsto (x+y,x-y)$ and $\psi: (x,y) \mapsto (xy,e^{x+y})$.
-      \item We will apply CCA on this two view representation and try to
-      retrieve the original view.
-    \end{itemize}
-  \textbf{Zaccharie and Louis}
-  \item Extract text word representations from the sentences associated with MS COCO data using \cite{word2vec}.
-  \\\textbf{Louis}
-  \item Extract CNN image representations using \cite{overfeat}.
-  \\\textbf{Zaccharie}
-  \item Apply CCA on the features extracted in 2. and 3.
-  \\\textbf{Zaccharie and Louis}
-  \item Implement a retrieval pipeline using the computed correlations as in \cite{normalizedcca}.
-    \subitem Tag-to-image search (T2I)
-    \textbf{Zaccharie}
-    \subitem Image-to-tag search (I2T)
-    \textbf{Louis}
-  \item Show qualitative example results on Microsoft COCO dataset
-  \\\textbf{Louis}
-  \item Pick 5-10 objects and quantitatively evaluate the results for tag-to-image search using the ground truth object labels provided with MS COCO. Plot a precision recall curve for each object and report average precision (AP).
-  \\\textbf{Louis}
-  \item Use the object ground truth for MS COCO to quantitatively evaluate the image-to-tag search as described in section 6.7 of \cite{normalizedcca}, i.e. compute the average precision for all tags ranked number 1, number 2, etc. We will do this on a randomly sampled test set.
-  \\\textbf{Zaccharie}
-  \item Quantitatively compare different CNN features, e.g. \cite{overfeat} with \cite{vgg} or even \cite{deepfilters}.
-  \\\textbf{Zaccharie}
-
-\end{enumerate}
+% TODO: use this citation
+\cite{hardooncca}
 
 
 \begin{thebibliography}{7}
 
+\bibitem{originalcca}
+  Hotelling, H.
+  (1936). 
+  \emph{Relations between two sets of variables.}
+  Biometrika, 28, 312–377.
+  % http://cbio.mines-paristech.fr/~jvert/svn/bibli/local/Hotelling1936Relation.pdf
+
+\bibitem{hardooncca}
+  Hardoon, D., Szedmak, S., and Shawe-Taylor, J.
+  (2004).
+  \emph{Canonical correlation analysis; an overview with application to learning methods.}
+  Neural Computation.
+  % http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.702.5978&rep=rep1&type=pdf
+
+% TODO: Beautify following bibitems
 \bibitem{normalizedcca}
   \emph{Normalized CCA},
   \url{http://slazebni.cs.illinois.edu/publications/yunchao\_cca13.pdf}
