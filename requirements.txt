@@ -12,3 +12,4 @@ tqdm==4.10.0
 pandas==0.19.1
 Keras==1.2.0
 tensorflow==0.12.0
+h5py==2.6.0
