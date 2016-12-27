@@ -91,3 +91,7 @@ ENV/
 *.fdb_latexmk
 *.fls
 *.out
+
+# directories
+coco
+report
