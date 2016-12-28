@@ -1,0 +1,82 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{graphicx}       % include graphics
+\usepackage{subcaption}     % subfigures
+\usepackage{float}          % placement of floats
+\usepackage{fancyhdr}       % head notes and foot notes
+
+
+
+\graphicspath{ {images/} }
+
+
+\title{Joint representations for images and text}
+\author{Louis Martin and Zaccharie Ramzi}
+
+
+\begin{document}
+
+\maketitle
+
+% TODO: put this as a subtitle
+Multimodal retrieval: image-to-image search, tag-to-image search,
+and image-to-tag search.
+
+\begin{abstract}
+\end{abstract}
+
+\section{Introduction}
+
+% TODO: cite with "Hotelling et al. (1936)" instead of "[1]"
+Canonical Correlation Analysis (CCA) was first proposed by \cite{originalcca}.
+The objective is to find a common basis between two correlated spaces (two datasets), such that the correletion between the vectors in the new basis is maximized.
+KCCA uses a kernel method to map the initial spaces to higher dimensional spaces before applying CCA. This usually increases the computational power of CCA.
+
+% TODO: use this citation
+\cite{hardooncca}
+
+
+\begin{thebibliography}{7}
+
+\bibitem{originalcca}
+  Hotelling, H.
+  (1936). 
+  \emph{Relations between two sets of variables.}
+  Biometrika, 28, 312–377.
+  % http://cbio.mines-paristech.fr/~jvert/svn/bibli/local/Hotelling1936Relation.pdf
+
+\bibitem{hardooncca}
+  Hardoon, D., Szedmak, S., and Shawe-Taylor, J.
+  (2004).
+  \emph{Canonical correlation analysis; an overview with application to learning methods.}
+  Neural Computation.
+  % http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.702.5978&rep=rep1&type=pdf
+
+% TODO: Beautify following bibitems
+\bibitem{normalizedcca}
+  \emph{Normalized CCA},
+  \url{http://slazebni.cs.illinois.edu/publications/yunchao\_cca13.pdf}
+\bibitem{word2vec}
+  \emph{Word2Vec},
+  \url{http://code.google.com/p/word2vec/}
+\bibitem{overfeat}
+  \emph{Overfeat},
+  \url{http://cilvr.nyu.edu/doku.php?id=software:overfeat:start}
+\bibitem{vgg}
+  \href{http://arxiv.org/pdf/1409.1556.pdf}{
+  K. Simonyan, A. Zisserman, Very Deep Convolutional Networks for Large-Scale Image Recognition, 2014
+  }
+\bibitem{deepfilters}
+  \href{http://www.robots.ox.ac.uk/~vgg/publications/2015/Cimpoi15/cimpoi15.pdf}{
+  M. Cimpoi, S. Maji, A. Vedaldi, Deep Filter Banks for Texture Recognition and Segmentation, CVPR 2015.
+  }
+\end{thebibliography}
+
+\end{document}
