@@ -8,3 +8,6 @@ git clone https://github.com/pdollar/coco.git
 cd coco/PythonAPI
 make
 ```
+
+## Structure of the dataset folder
+dataset/annotations/*.json
