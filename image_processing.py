@@ -5,7 +5,7 @@ import numpy as np
 from pycocotools.coco import COCO
 from scipy import misc
 
-data_dir = 'data'
+data_dir = 'dataset'
 data_type = 'train2014'
 ann_file = '{0}/annotations/instances_{1}.json'.format(data_dir, data_type)
 output_shape = (244, 244, 3)
