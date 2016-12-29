@@ -17,7 +17,7 @@ categories = ["tennis", "boat", "giraffe"]
 
 def process_image(img):
     '''From an image given by the MS Coco API, returns the ndarray standardized
-    if the image is tractable, False o.w.
+    if the image is tractable, empty list o.w.
         Args:
             - img (dict): the image dictionary returned by the MS Coco API
         Output:
@@ -44,7 +44,7 @@ def process_image(img):
             X = img_mat
         return misc.imresize(X, output_shape)
     else:
-        return False
+        return []
 
 
 def load_images(categories=None):
@@ -73,7 +73,7 @@ def load_images(categories=None):
                 # for each image we haven't processed yet, we process it
                 img = coco.loadImgs(img_id)[0]
                 X = process_image(img)
-                if X:
+                if len(X) > 0:
                     X_train = X_train, X
                     Y_train = Y_train, coco.loadCats(cat_id)[0]["name"]
         registered_img_ids = img_ids.union(img_ids)
