@@ -11,7 +11,14 @@ from pycocotools.coco import COCO
 
 def sentence2vec(sentence, model):
     ''' Converts a sentence to a vector by averaging each word vector
-    representation given by the model '''
+    representation given by the model.
+
+    Args:
+        sentence (str): Sentence to be converted to a vector.
+        model: gensim word2vec model
+    Returns:
+        vec: the vector representation of sentence of size model.vector_size
+    '''
     # Remove all non alphanumeric characters
     regex = re.compile('[\W_ ]+') # TODO: compiling once for all calls might be faster
     regex = re.compile('[%s]' % re.escape(string.punctuation))
