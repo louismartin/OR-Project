@@ -5,7 +5,7 @@ import time
 import numpy as np
 from pycocotools.coco import COCO
 from scipy import misc
-from tqdm import tqdm
+from tqdm import tqdm_notebook
 
 data_dir = "dataset"
 data_type = "train2014"
@@ -66,10 +66,10 @@ def load_images(categories=None):
         names = [cat["name"] for cat in cats]
     cat_ids = coco.getCatIds(catNms=names)
     registered_img_ids = set()
-    for cat_id in tqdm(cat_ids):
+    for cat_id in tqdm_notebook(cat_ids):
         # Get all the image ids related to that category
         img_ids = set(coco.catToImgs[cat_id])
-        for img_id in tqdm(img_ids, position=1):
+        for img_id in tqdm_notebook(img_ids, position=1):
             if not(img_id in registered_img_ids):
                 # for each image we haven't processed yet, we process it
                 img = coco.loadImgs(img_id)[0]
