@@ -51,8 +51,8 @@ def process_image(img):
 def load_images(categories=None):
     '''Preprocessing of the MS Coco dataset
         Output:
-            - ndarray (n, 244, 244, 3): the input data (x_train), images
-            - list (n): the labels of the images (y_train)
+            - ndarray (n, 244, 244, 3): the input data (X_train), images
+            - list (n): the labels of the images (Y_train)
     '''
     X_train = list()
     Y_train = list()
