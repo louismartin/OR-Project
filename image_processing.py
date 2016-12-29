@@ -12,7 +12,7 @@ data_type = "train2014"
 ann_file = '{0}/annotations/instances_{1}.json'.format(data_dir, data_type)
 ann_file = op.join(
     data_dir, "annotations", "instances_{0}.json".format(data_type))
-output_shape = (244, 244, 3)
+output_shape = (224, 224, 3)
 categories = ["snowboard", "boat", "giraffe"]
 
 
@@ -75,8 +75,8 @@ def load_images(categories=None):
                 img = coco.loadImgs(img_id)[0]
                 X = process_image(img)
                 if len(X) > 0:
-                    X_train = X_train, X
-                    Y_train = Y_train, coco.loadCats(cat_id)[0]["name"]
+                    X_train = X_train + [X]
+                    Y_train = Y_train + [cat_id]
         registered_img_ids = img_ids.union(img_ids)
     X_train = np.array(X_train)
     return X_train, Y_train
