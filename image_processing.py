@@ -5,6 +5,7 @@ import time
 import numpy as np
 from pycocotools.coco import COCO
 from scipy import misc
+from tqdm import tqdm
 
 data_dir = "dataset"
 data_type = "train2014"
@@ -12,7 +13,7 @@ ann_file = '{0}/annotations/instances_{1}.json'.format(data_dir, data_type)
 ann_file = op.join(
     data_dir, "annotations", "instances_{0}.json".format(data_type))
 output_shape = (244, 244, 3)
-categories = ["tennis", "boat", "giraffe"]
+categories = ["snowboard", "boat", "giraffe"]
 
 
 def process_image(img):
@@ -58,17 +59,17 @@ def load_images(categories=None):
     # initialize COCO api for instance annotations
     coco = COCO(ann_file)
     if categories:
+        names = categories
+    else:
         # load all categories
         cats = coco.loadCats(coco.getCatIds())
         names = [cat["name"] for cat in cats]
-    else:
-        names = categories
     cat_ids = coco.getCatIds(catNms=names)
     registered_img_ids = set()
-    for cat_id in cat_ids:
+    for cat_id in tqdm(cat_ids):
         # Get all the image ids related to that category
         img_ids = set(coco.catToImgs[cat_id])
-        for img_id in img_ids:
+        for img_id in tqdm(img_ids, position=1):
             if not(img_id in registered_img_ids):
                 # for each image we haven't processed yet, we process it
                 img = coco.loadImgs(img_id)[0]
@@ -79,5 +80,3 @@ def load_images(categories=None):
         registered_img_ids = img_ids.union(img_ids)
     X_train = np.array(X_train)
     return X_train, Y_train
-
-load_images(categories)
