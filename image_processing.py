@@ -9,7 +9,6 @@ from tqdm import tqdm_notebook
 
 data_dir = "dataset"
 data_type = "train2014"
-ann_file = '{0}/annotations/instances_{1}.json'.format(data_dir, data_type)
 ann_file = op.join(
     data_dir, "annotations", "instances_{0}.json".format(data_type))
 output_shape = (224, 224, 3)
@@ -50,15 +49,20 @@ def process_image(img):
 
 def load_images(categories=None):
     '''Preprocessing of the MS Coco dataset
+        Args:
+            - categories (list): list of the categories you want to consider
         Output:
             - ndarray (n, 244, 244, 3): the input data (X_train), images
             - list (n): the labels of the images (Y_train)
+            - list (n): the ids of the images
     '''
     X_train = list()
     Y_train = list()
+    img_train_ids = list()
     # initialize COCO api for instance annotations
     coco = COCO(ann_file)
     if categories:
+        # here we only take a subset of the categories
         names = categories
     else:
         # load all categories
@@ -77,6 +81,7 @@ def load_images(categories=None):
                 if len(X) > 0:
                     X_train = X_train + [X]
                     Y_train = Y_train + [cat_id]
+                    img_train_ids = img_train_ids + [img_id]
         registered_img_ids = img_ids.union(img_ids)
     X_train = np.array(X_train)
     return X_train, Y_train
