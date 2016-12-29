@@ -15,4 +15,4 @@ def compile_net():
 def compute_vgg_features(X, layer=2):
     f = K.function([net.layers[0].input, K.learning_phase()],
                    [net.layers[-layer].output])
-    return f([im, 0])[0]
+    return f([X, 0])[0]
