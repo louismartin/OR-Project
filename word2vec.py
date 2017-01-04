@@ -1,5 +1,11 @@
+
+# coding: utf-8
+
+# Download Google's pretrained model $\href{https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?usp=sharing}{here}$
+
 import re
 import string
+import os.path as op
 
 import gensim
 import numpy as np
@@ -35,13 +41,20 @@ def sentence2vec(sentence, model):
     vec /= count
     return vec
 
-def create_caption_dataframe():
-    ''' Create a dataframe containing all captions for each images '''
+def create_caption_dataframe(overwrite=False):
+    '''
+    Create a dataframe containing all captions for each images 
+    '''
     # initialize COCO api for caption annotations
-    dataDir='dataset'
-    dataType='train2014'
-    annFile = '%s/annotations/captions_%s.json'%(dataDir,dataType)
-    coco = COCO(annFile)
+    data_dir='dataset'
+
+    dataframe_path = op.join(data_dir, 'annotations', 'captions.csv')
+    if op.exists(dataframe_path) and not overwrite:
+        df = pd.read_csv(dataframe_path, index_col=0)
+        return df
+    data_type='train2014'
+    caption_file = op.join(data_dir, 'annotations', 'captions_%s.json' % data_type)
+    coco = COCO(caption_file)
 
     # Get all image ids
     img_ids = coco.getImgIds()
@@ -56,25 +69,26 @@ def create_caption_dataframe():
         for ann in anns:
             caption += ' ' + ann['caption']
         df.loc[img_id] = caption
-    df.to_csv('%s/annotations/captions.csv'% dataDir)
+    df.to_csv(dataframe_path)
     return df
 
 
 df_caption = create_caption_dataframe()
 
-# Load Google's pre-trained Word2Vec model.
+
+### Load Google's pre-trained Word2Vec model.
 # https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?usp=sharing
 print('\nLoading word2vec model ...')
-path = './models/GoogleNews-vectors-negative300.bin'
+path = op.join('models', 'GoogleNews-vectors-negative300.bin')
 model = gensim.models.Word2Vec.load_word2vec_format(path, binary=True)
 
-# TODO: Might not be ideal to put vectors in a pandas dataframe
-df_vec = pd.DataFrame(
-    index=df_caption.index,
-    columns=list(range(model.vector_size))
-    )
+
 # Compute every caption vector representation
+i = 0
+X = np.zeros((df_caption.shape[0], model.vector_size))
 for index, row in tqdm(df_caption.iterrows(), total=df_caption.shape[0],
                         desc='Computing textual embeddings'):
-    df_vec.loc[index] = sentence2vec(row['caption'], model)
-df_vec.to_csv('dataset/annotations/textual_embeddings.csv')
+    X[i,:] = sentence2vec(row['caption'], model)
+    i += 1
+np.save('dataset/annotations/textual_embeddings.npy', X)
+
