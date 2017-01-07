@@ -28,7 +28,6 @@ np.save('X_visual.npy', X_visual)
 
 X_visual = np.load('X_visual.npy')
 X_visual = X_visual[:X_visual.shape[0]//2]
-X_visual = X_visual[:17]
 
 
 net = vgg19.VGG19()
