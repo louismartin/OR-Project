@@ -1,23 +1,13 @@
-from keras.applications import vgg19
 from keras import backend as K
-from keras.optimizers import SGD
 import numpy as np
 
 
-net = vgg19.VGG19()
-sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
-
-
-def compile_net():
-    """Compile net when needed
-    """
-    net.compile(optimizer=sgd, loss='categorical_crossentropy')
-
-
-def compute_vgg_features(X, layer=2):
-    """Computes vgg features of a batch of image matrices from a given layer
+def compute_nn_features(X, net, layer=2):
+    """Computes features of a batch of image matrices from a given layer of a
+    given neural network
         Args:
             - X (ndarray: (None, 224, 224, 3)): the batch of matrices
+            - net (keras.Model): the neural network
             - layer (int): the index of the layer (starting from the output)
             you want to consider
         Output:
