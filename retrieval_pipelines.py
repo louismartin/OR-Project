@@ -106,6 +106,7 @@ def most_common_tags(annotations, n_tags, stopwords):
     counter = Counter()
     for annotation in annotations:
         sentence = regex.sub('', annotation)
+        sentence = sentence.lower()
         words = sentence.split(' ')
         counter.update([word for word in words if word not in stopwords])
     return counter.most_common(n_tags)
