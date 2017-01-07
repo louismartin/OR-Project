@@ -96,8 +96,8 @@ def most_common_tags(annotations, n_tags, stopwords):
         Args:
             - annotations (pd data frame): the data frame regrouping captions
             - n_tags (int): the number of tags you want to retrieve
-            - stopwords (list): the list of words we don't want to take into
-            account
+            - stopwords (iterable): the list of words we don't want to take
+            into account
         Output:
             - list: the list of the n_tags most common tags in the annotations
     '''
