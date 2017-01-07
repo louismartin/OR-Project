@@ -1,14 +1,17 @@
+import re
+import string
 import os.path as op
 
 import numpy as np
+import pandas as pd
 
-from image_processing import process_image
+from image_processing import process_image, data_dir
 from vgg import compute_nn_features
 from word2vec import sentence2vec
 
 
 def absolute_coco_path(img_id, coco):
-    '''From an MS Coco imame ID returns the absolute path of the image
+    '''From an MS Coco image ID returns the absolute path of the image
         Args:
             - img_id (str): the ID of the image in the MS Coco DB
             - coco (MS Coco API): the API to link the img ids to MS Coco images
@@ -50,8 +53,9 @@ def tag_to_image_search(tag, W_text, word_model, database_images, img_ids,
 
 def image_to_tag_search(image_path, W_image, image_model, database_captions,
                         img_ids, coco, n_tags=3, expanding_factor=10):
-    '''From a given tag returns the top n_images in the database closest to the
-    tag in the common feature space.
+    '''From a given image (by its image path), returns the top
+    n_tags*expanding_factor annotations in the database closest to the image in
+    the common space.
         Args:
             - image_path (str): the path of the image to search
             - W_image (ndarray): the matrix of transition between the visual
@@ -66,7 +70,8 @@ def image_to_tag_search(image_path, W_image, image_model, database_captions,
             - expanding_factor (int): the proportion of captions we need to
             retrieve to achieve the retrieval of n_tags tags.
         Output:
-            - list: the list of the retrieved tags
+            - pd data frame: the the data frame regrouping the captions of the
+            n_tags*expanding_factor closest images in the database.
     '''
     # Load the image in a numpy array and process it
     img_mat = process_image(image_path)
@@ -79,6 +84,27 @@ def image_to_tag_search(image_path, W_image, image_model, database_captions,
     idx_nearest_neigh = nearest_neighbours(
         common_space_features, database_captions, 10*n_tags)
     img_ids = img_ids[idx_nearest_neigh]
+    # We load the annotations
+    dataframe_path = op.join(data_dir, 'annotations', 'captions.csv')
+    captions_df = pd.read_csv(dataframe_path, index_col=0)
+    return captions_df.loc[img_ids]
+
+
+def most_common_tags(annotations, n_tags, stopwords):
+    '''From a data frame of annotations, retrieves the n_tags most common tags.
+        Args:
+            - annotations (pd data frame): the data frame regrouping captions
+            - n_tags (int): the number of tags you want to retrieve
+            - stopwords (list): the list of words we don't want to take into
+            account
+        Output:
+            - list: the list of the n_tags most common tags in the annotations
+    '''
+    regex = re.compile('[\W_ ]+')
+    regex = re.compile('[%s]' % re.escape(string.punctuation))
+    for annotation in annotations:
+        sentence = regex.sub('', sentence)
+        words = sentence.split(' ')
 
 
 def nearest_neighbours(new_X, X, k):
