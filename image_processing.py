@@ -15,16 +15,15 @@ output_shape = (224, 224, 3)
 categories = ["snowboard", "boat", "giraffe"]
 
 
-def process_image(img):
-    '''From an image given by the MS Coco API, returns the ndarray standardized
+def process_image(img_path):
+    '''From an image path, returns the ndarray standardized
     if the image is tractable, empty list o.w.
         Args:
-            - img (dict): the image dictionary returned by the MS Coco API
+            - img_path (str): the path to the image to be processed
         Output:
             - ndarray: the matrix associated with the cropped and resized image
     '''
-    img_mat = misc.imread(
-        op.join(data_dir, data_type, img["file_name"]))
+    img_mat = misc.imread(img_path)
     # We need to crop image on both sides in order to have
     # standardized images in terms of shape
     dimensions = img_mat.shape
@@ -77,7 +76,8 @@ def load_images(categories=None):
             if not(img_id in registered_img_ids):
                 # for each image we haven't processed yet, we process it
                 img = coco.loadImgs(img_id)[0]
-                X = process_image(img)
+                img_path = op.join(data_dir, data_type, img["file_name"])
+                X = process_image(img_path)
                 if len(X) > 0:
                     X_train = X_train + [X]
                     Y_train = Y_train + [cat_id]
