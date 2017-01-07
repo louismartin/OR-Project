@@ -46,7 +46,7 @@ def tag_to_image_search(tag, W_text, word_model, database_images, img_ids,
     common_space_features = W_text.dot(textual_features)
     # In the common space find its nearest neighbours
     idx_nearest_neigh = nearest_neighbours(
-        textual_features, database_images, n_images)
+        common_space_features, database_images, n_images)
     retrieved_img_ids = img_ids[idx_nearest_neigh]
     img_paths = [absolute_coco_path(img_id) for img_id in retrieved_img_ids]
     return img_paths
