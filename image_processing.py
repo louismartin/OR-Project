@@ -84,4 +84,4 @@ def load_images(categories=None):
                     img_train_ids = img_train_ids + [img_id]
         registered_img_ids = img_ids.union(img_ids)
     X_train = np.array(X_train)
-    return X_train, Y_train
+    return X_train, Y_train, img_ids
