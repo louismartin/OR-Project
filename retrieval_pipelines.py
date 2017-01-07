@@ -1,6 +1,7 @@
+from collections import Counter
+import os.path as op
 import re
 import string
-import os.path as op
 
 import numpy as np
 import pandas as pd
@@ -102,9 +103,12 @@ def most_common_tags(annotations, n_tags, stopwords):
     '''
     regex = re.compile('[\W_ ]+')
     regex = re.compile('[%s]' % re.escape(string.punctuation))
+    counter = Counter()
     for annotation in annotations:
-        sentence = regex.sub('', sentence)
+        sentence = regex.sub('', annotation)
         words = sentence.split(' ')
+        counter.update([word for word in words if word not in stopwords])
+    return counter.most_common(n_tags)
 
 
 def nearest_neighbours(new_X, X, k):
