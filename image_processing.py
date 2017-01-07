@@ -46,10 +46,11 @@ def process_image(img_path):
         return []
 
 
-def load_images(categories=None):
+def load_images(categories=None, coco=None):
     '''Preprocessing of the MS Coco dataset
         Args:
             - categories (list): list of the categories you want to consider
+            - coco (pycoco object): pass a coco instance for faster loading
         Output:
             - ndarray (n, 244, 244, 3): the input data (X_train), images
             - list (n): the labels of the images (Y_train)
@@ -58,8 +59,9 @@ def load_images(categories=None):
     X_train = list()
     Y_train = list()
     img_train_ids = list()
-    # initialize COCO api for instance annotations
-    coco = COCO(ann_file)
+    if coco is None:
+        # initialize COCO api for instance annotations
+        coco = COCO(ann_file)
     if categories:
         # here we only take a subset of the categories
         names = categories
