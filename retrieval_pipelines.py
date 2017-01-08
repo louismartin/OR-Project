@@ -47,16 +47,15 @@ def tag_to_image_search(tag_features, W_text, database_images, img_ids,
     return img_ids[idx_nearest_neigh]
 
 
-def image_to_tag_search(image_path, W_image, image_model, database_captions,
+def image_to_tag_search(visual_features, W_image, database_captions,
                         img_ids, coco, n_tags=3, expanding_factor=10):
-    '''From a given image (by its image path), returns the top
+    '''From a given image (by its vgg19 features), returns the top
     n_tags*expanding_factor annotations in the database closest to the image in
     the common space.
         Args:
-            - image_path (str): the path of the image to search
+            - visual_features (ndarray): the features of the image to search
             - W_image (ndarray): the matrix of transition between the visual
             feature space to the common space.
-            - image_model (keras model): the vgg 19 model
             - database_captions (ndarray): an array containing the features of
             the database tags in the common space.
             - img_ids (list): the list of the image IDs of the
@@ -69,10 +68,6 @@ def image_to_tag_search(image_path, W_image, image_model, database_captions,
             - pd data frame: the the data frame regrouping the captions of the
             n_tags*expanding_factor closest images in the database.
     '''
-    # Load the image in a numpy array and process it
-    img_mat = process_image(image_path)
-    # Compute the features of the image in the visual feature space
-    visual_features = compute_nn_features(img_mat, image_model)
     # Put the tag in the common space
     common_space_features = W_image.dot(visual_features)
     # In the common space find its nearest neighbours (we take a lot of them to
@@ -99,8 +94,8 @@ def most_common_tags(annotations, n_tags, stopwords):
     regex = re.compile('[\W_ ]+')
     regex = re.compile('[%s]' % re.escape(string.punctuation))
     counter = Counter()
-    for annotation in annotations:
-        sentence = regex.sub('', annotation)
+    for caption in annotations["caption"]:
+        sentence = regex.sub('', caption)
         sentence = sentence.lower()
         words = sentence.split(' ')
         counter.update([word for word in words if word not in stopwords])
