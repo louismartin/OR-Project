@@ -56,7 +56,6 @@ def load_images(categories=None, coco=None):
             - list (n): the ids of the images
     '''
     X_train = list()
-    Y_train = list()
     img_train_ids = list()
     if coco is None:
         # initialize COCO api for instance annotations
@@ -70,7 +69,8 @@ def load_images(categories=None, coco=None):
         names = [cat["name"] for cat in cats]
     # Get ids corresponding to the categories
     cat_ids = coco.getCatIds(catNms=names)
-    img_ids = set([img_id for cat_id in cat_ids for img_id in coco.catToImgs[cat_id]])
+    img_ids = set([img_id for cat_id in cat_ids
+                   for img_id in coco.catToImgs[cat_id]])
     for img_id in tqdm(img_ids):
         # for each image we haven't processed yet, we process it
         img = coco.loadImgs(img_id)[0]
