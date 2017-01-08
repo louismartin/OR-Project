@@ -23,15 +23,14 @@ def absolute_coco_path(img_id, coco):
     return op.join(data_dir, data_type, img["file_name"])
 
 
-def tag_to_image_search(tag, W_text, word_model, database_images, img_ids,
+def tag_to_image_search(tag_features, W_text, database_images, img_ids,
                         coco, n_images=3):
     '''From a given tag returns the top n_images in the database closest to the
     tag in the common feature space.
         Args:
-            - tag (str): the tag to search
+            - tag_features (ndarray): the features of the tag to search
             - W_text (ndarray): the matrix of transition between the textual
             feature space to the common space.
-            - word_model (gensim model): the word 2 vec model
             - database_images (ndarray): an array containing the features of
             the database images in the common space.
             - img_ids (list): the list of the image IDs of the database_images.
@@ -40,10 +39,8 @@ def tag_to_image_search(tag, W_text, word_model, database_images, img_ids,
         Output:
             - list: the list of the absolute paths of the retrieved images
     '''
-    # Compute the features of the tag in the textual feature space
-    textual_features = sentence2vec(tag, word_model)
     # Put the tag in the common space
-    common_space_features = W_text.dot(textual_features)
+    common_space_features = W_text.dot(tag_features)
     # In the common space find its nearest neighbours
     idx_nearest_neigh = nearest_neighbours(
         common_space_features, database_images, n_images)
