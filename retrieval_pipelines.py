@@ -98,7 +98,8 @@ def most_common_tags(annotations, n_tags, stopwords):
         sentence = regex.sub('', caption)
         sentence = sentence.lower()
         words = sentence.split(' ')
-        counter.update([word for word in words if word not in stopwords])
+        counter.update([word for word in words
+                        if word not in stopwords and word != ""])
     return counter.most_common(n_tags)
 
 
