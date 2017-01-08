@@ -5,7 +5,7 @@ import time
 import numpy as np
 from pycocotools.coco import COCO
 from scipy import misc
-from tqdm import tqdm_notebook
+from tqdm import tqdm
 
 data_dir = "dataset"
 data_type = "train2014"
@@ -53,7 +53,6 @@ def load_images(categories=None, coco=None):
             - coco (pycoco object): pass a coco instance for faster loading
         Output:
             - ndarray (n, 244, 244, 3): the input data (X_train), images
-            - list (n): the labels of the images (Y_train)
             - list (n): the ids of the images
     '''
     X_train = list()
@@ -69,21 +68,17 @@ def load_images(categories=None, coco=None):
         # load all categories
         cats = coco.loadCats(coco.getCatIds())
         names = [cat["name"] for cat in cats]
+    # Get ids corresponding to the categories
     cat_ids = coco.getCatIds(catNms=names)
-    registered_img_ids = set()
-    for cat_id in tqdm_notebook(cat_ids):
-        # Get all the image ids related to that category
-        img_ids = set(coco.catToImgs[cat_id])
-        for img_id in tqdm_notebook(img_ids, position=1):
-            if not(img_id in registered_img_ids):
-                # for each image we haven't processed yet, we process it
-                img = coco.loadImgs(img_id)[0]
-                img_path = op.join(data_dir, data_type, img["file_name"])
-                X = process_image(img_path)
-                if len(X) > 0:
-                    X_train = X_train + [X]
-                    Y_train = Y_train + [cat_id]
-                    img_train_ids = img_train_ids + [img_id]
-        registered_img_ids = img_ids.union(img_ids)
+    img_ids = set([img_id for cat_id in cat_ids for img_id in coco.catToImgs[cat_id]])
+    for img_id in tqdm(img_ids):
+        # for each image we haven't processed yet, we process it
+        img = coco.loadImgs(img_id)[0]
+        img_path = op.join(data_dir, data_type, img["file_name"])
+        X = process_image(img_path)
+        if len(X) > 0:
+            X_train = X_train + [X]
+            img_train_ids = img_train_ids + [img_id]
     X_train = np.array(X_train)
-    return X_train, Y_train, img_ids
+    img_train_ids = np.array(img_train_ids)
+    return X_train, img_train_ids
