@@ -6,7 +6,7 @@ import string
 import numpy as np
 import pandas as pd
 
-from image_processing import process_image, data_dir
+from image_processing import process_image, data_dir, data_type
 from vgg import compute_nn_features
 from word2vec import sentence2vec
 
@@ -45,7 +45,7 @@ def tag_to_image_search(tag_features, W_text, database_images, img_ids,
     idx_nearest_neigh = nearest_neighbours(
         common_space_features, database_images, n_images)
     retrieved_img_ids = img_ids[idx_nearest_neigh]
-    img_paths = [absolute_coco_path(img_id) for img_id in retrieved_img_ids]
+    img_paths = [absolute_coco_path(int(img_id), coco) for img_id in retrieved_img_ids]
     return img_paths
 
 
@@ -120,4 +120,4 @@ def nearest_neighbours(new_X, X, k):
             - list: the indices of the nearest neighbours
     '''
     dist = np.linalg.norm(X - new_X, axis=1)
-    return np.argpartition(dist, k)[:, k]
+    return np.argpartition(dist, k)[:k]
