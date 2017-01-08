@@ -23,6 +23,7 @@ def sentence2vec(sentence, model):
     # Remove all non alphanumeric characters
     regex = re.compile('[\W_ ]+') # TODO: compiling once for all calls might be faster
     regex = re.compile('[%s]' % re.escape(string.punctuation))
+    sentence = sentence.lower()
     sentence = regex.sub('', sentence)
     words = sentence.split(' ')
 
