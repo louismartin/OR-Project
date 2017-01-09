@@ -99,3 +99,4 @@ report
 
 # saved objects
 *.npy
+*.tpl
