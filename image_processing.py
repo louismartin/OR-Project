@@ -69,8 +69,9 @@ def load_images(categories=None, coco=None):
         names = [cat["name"] for cat in cats]
     # Get ids corresponding to the categories
     cat_ids = coco.getCatIds(catNms=names)
-    img_ids = set([img_id for cat_id in cat_ids
-                   for img_id in coco.catToImgs[cat_id]])
+    img_ids = [img_id for cat_id in cat_ids
+               for img_id in coco.catToImgs[cat_id]]
+    img_ids = sorted(set(img_ids))
     for img_id in tqdm(img_ids):
         # for each image we haven't processed yet, we process it
         img = coco.loadImgs(img_id)[0]
