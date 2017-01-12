@@ -5,11 +5,13 @@ def split_ids(part, n_parts, coco):
     ''' Split ids into n_parts and returns one part
     Args:
         part (int): number of part to return (0 based)
+                    0 <= part < n_parts
         n_parts (int): Total number of parts to split
         coco: coco api instance
     Returns:
         ids (list): ids of the corresponding part
     '''
+    assert 0 <= part and part < n_parts
     # Get all ids (sorted and no duplicates)
     cat_ids = coco.getCatIds()
     img_ids = [img_id for cat_id in cat_ids
