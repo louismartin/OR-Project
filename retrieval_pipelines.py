@@ -24,7 +24,8 @@ def absolute_coco_path(img_id, coco):
 
 
 def tag_to_image_search(tag_features, W_text, database_images, img_ids,
-                        coco, n_images=3):
+                        coco, D, distance="similarity",
+                        n_images=3):
     '''From a given tag returns the top n_images in the database closest to the
     tag in the common feature space.
         Args:
@@ -35,6 +36,8 @@ def tag_to_image_search(tag_features, W_text, database_images, img_ids,
             the database images in the common space.
             - img_ids (list): the list of the image IDs of the database_images.
             - coco (MS Coco API): the API to link the img ids to MS Coco images
+            - D (ndarray): the matrix composed of the eigenvalues for
+            projection
             - n_images (int): the number of images to retrieve
         Output:
             - list: the list of the absolute paths of the retrieved images
@@ -43,12 +46,14 @@ def tag_to_image_search(tag_features, W_text, database_images, img_ids,
     common_space_features = W_text.dot(tag_features)
     # In the common space find its nearest neighbours
     idx_nearest_neigh = nearest_neighbours(
-        common_space_features, database_images, n_images)
+        common_space_features, database_images, D, n_images,
+        distance=distance)
     return img_ids[idx_nearest_neigh]
 
 
 def image_to_tag_search(visual_features, W_image, database_captions,
-                        img_ids, coco, n_tags=3, expanding_factor=10):
+                        img_ids, coco, D, distance="similarity",
+                        n_tags=5, expanding_factor=10):
     '''From a given image (by its vgg19 features), returns the top
     n_tags*expanding_factor annotations in the database closest to the image in
     the common space.
@@ -61,6 +66,8 @@ def image_to_tag_search(visual_features, W_image, database_captions,
             - img_ids (list): the list of the image IDs of the
             database_captions.
             - coco (MS Coco API): the API to link the img ids to MS Coco images
+            - D (ndarray): the matrix composed of the eigenvalues for
+            projection
             - n_tags (int): the number of tags to retrieve eventually
             - expanding_factor (int): the proportion of captions we need to
             retrieve to achieve the retrieval of n_tags tags.
@@ -73,7 +80,8 @@ def image_to_tag_search(visual_features, W_image, database_captions,
     # In the common space find its nearest neighbours (we take a lot of them to
     # then select the most common tags)
     idx_nearest_neigh = nearest_neighbours(
-        common_space_features, database_captions, 10*n_tags)
+        common_space_features, database_captions, D, expanding_factor*n_tags,
+        distance=distance)
     img_ids = img_ids[idx_nearest_neigh]
     # We load the annotations
     dataframe_path = op.join(data_dir, 'annotations', 'captions.csv')
@@ -103,15 +111,26 @@ def most_common_tags(annotations, n_tags, stopwords):
     return counter.most_common(n_tags)
 
 
-def nearest_neighbours(new_X, X, k):
+def nearest_neighbours(new_X, X, D, k, distance="similarity"):
     '''Returns the indices of the k nearest neighbours of new_X in X.
         Args:
             - new_X (ndarray): the vector whose nearest neighbours you want to
             find.
             - X (ndarray): the vectors in which you are looking for neighbours.
+            - D (ndarray): the matrix composed of the eigenvalues for
+            projection
             - k (int): the number of neighbours you want to return.
         Output:
             - list: the indices of the nearest neighbours
     '''
-    dist = np.linalg.norm(X - new_X, axis=1)
+    if distance == "euclidean":
+        dist = np.linalg.norm(X - new_X, axis=1)
+    elif distance == "similarity":
+        new_X_resized = D.dot(new_X)
+        new_X_resized = new_X_resized / np.linalg.norm(new_X_resized)
+        X_resized = X.dot(D)
+        X_resized = X_resized / np.linalg.norm(X_resized, axis=1)[:, None]
+        dist = 1 - X_resized.dot(new_X_resized)
+    else:
+        raise ValueError("Distance has to be similarity or euclidean")
     return np.argpartition(dist, k)[:k]
