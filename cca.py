@@ -52,6 +52,7 @@ def cca(X_list, latent_dim=2):
     inds = (-np.abs(w)).argsort()[:d]  # Minus to sort descending fast
 
     vr_top = vr[:, inds]
+    w_top = w[inds]
 
     # Fill the W matrices
     W_list = []
@@ -61,4 +62,4 @@ def cca(X_list, latent_dim=2):
         Wi = vr_top[start:end]
         W_list.append(Wi)
 
-    return W_list
+    return W_list, w_top
