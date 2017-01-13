@@ -14,6 +14,8 @@ def cca(X_list, latent_dim=2):
     Returns:
         - W_list: List of W matrices (ndarray) for projecting the data into the
                   latent space.
+        - w_top: list of the eigenvalues corresponding to the eigenvectors
+        returned.
     '''
     assert all([X.shape[0] == X_list[0].shape[0] for X in X_list])
     print('Computing covariance matrices ...')
