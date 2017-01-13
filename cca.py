@@ -1,5 +1,7 @@
+import time
+
 import numpy as np
-from scipy.linalg import eig
+from scipy.linalg import eigh
 
 
 def cca(X_list, latent_dim=2):
@@ -14,6 +16,7 @@ def cca(X_list, latent_dim=2):
                   latent space.
     '''
     assert all([X.shape[0] == X_list[0].shape[0] for X in X_list])
+    print('Computing covariance matrices ...')
     # Shape of matrix S is the sum of columns of all the views
     columns = [X.shape[1] for X in X_list]
     S_size = sum(columns)
@@ -37,11 +40,15 @@ def cca(X_list, latent_dim=2):
                 T[i_start:i_end, j_start:j_end] = Sij
 
     # Solve the generalized eigen value problem
-    w, vr = eig(a=S, b=T, overwrite_a=True, overwrite_b=True)
+    print('Computing eigen vectors ...')
+    tic = time.time()
+    d = latent_dim
+    w, vr = eigh(a=S, b=T, eigvals=(S_size-d, S_size-1), turbo=True,
+                 overwrite_a=True, overwrite_b=True, check_finite=True)
     w = w.real
+    print('{0} vectors computed in {1:.2g}s'.format(len(w), time.time() - tic))
 
     # Pick top d eignevectors
-    d = latent_dim
     inds = (-np.abs(w)).argsort()[:d]  # Minus to sort descending fast
 
     vr_top = vr[:, inds]
