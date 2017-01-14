@@ -1,6 +1,15 @@
 import numpy as np
 
 
+def get_all_sorted_ids(coco):
+    ''' Get all ids (sorted and no duplicates) '''
+    cat_ids = coco.getCatIds()
+    img_ids = [img_id for cat_id in cat_ids
+               for img_id in coco.catToImgs[cat_id]]
+    img_ids = sorted(set(img_ids))
+    return img_ids
+
+
 def split_ids(part, n_parts, coco):
     ''' Split ids into n_parts and returns one part
     Args:
@@ -13,10 +22,7 @@ def split_ids(part, n_parts, coco):
     '''
     assert 0 <= part and part < n_parts
     # Get all ids (sorted and no duplicates)
-    cat_ids = coco.getCatIds()
-    img_ids = [img_id for cat_id in cat_ids
-               for img_id in coco.catToImgs[cat_id]]
-    img_ids = sorted(set(img_ids))
+    img_ids = get_all_sorted_ids(coco)
     n_ids = len(img_ids)
     part_size = int(np.ceil(n_ids / n_parts))
     start = part*part_size

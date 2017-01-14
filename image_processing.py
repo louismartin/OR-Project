@@ -7,6 +7,8 @@ from pycocotools.coco import COCO
 from scipy import misc
 from tqdm import tqdm
 
+from tools import get_all_sorted_ids
+
 data_dir = "dataset"
 data_type = "train2014"
 ann_file = op.join(
@@ -68,10 +70,7 @@ def load_images(categories=None, coco=None):
         cats = coco.loadCats(coco.getCatIds())
         names = [cat["name"] for cat in cats]
     # Get ids corresponding to the categories
-    cat_ids = coco.getCatIds(catNms=names)
-    img_ids = [img_id for cat_id in cat_ids
-               for img_id in coco.catToImgs[cat_id]]
-    img_ids = sorted(set(img_ids))
+    img_ids = get_all_sorted_ids(coco)
     for img_id in tqdm(img_ids):
         # for each image we haven't processed yet, we process it
         img = coco.loadImgs(img_id)[0]
