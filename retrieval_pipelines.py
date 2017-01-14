@@ -111,11 +111,11 @@ def most_common_tags(annotations, n_tags, stopwords):
     return counter.most_common(n_tags)
 
 
-def nearest_neighbours(new_X, X, D, k, distance="similarity"):
+def nearest_neighbours(X_query, X, D, k, distance="similarity"):
     '''Returns the indices of the k nearest neighbours of new_X in X.
         Args:
-            - new_X (ndarray): the vector whose nearest neighbours you want to
-            find.
+            - X_query (ndarray): the vector whose nearest neighbours you want
+            to find.
             - X (ndarray): the vectors in which you are looking for neighbours.
             - D (ndarray): the matrix composed of the eigenvalues for
             projection
@@ -124,13 +124,13 @@ def nearest_neighbours(new_X, X, D, k, distance="similarity"):
             - list: the indices of the nearest neighbours
     '''
     if distance == "euclidean":
-        dist = np.linalg.norm(X - new_X, axis=1)
+        dist = np.linalg.norm(X - X_query, axis=1)
     elif distance == "similarity":
-        new_X_resized = D.dot(new_X)
-        new_X_resized = new_X_resized / np.linalg.norm(new_X_resized)
+        X_query_resized = D.dot(X_query)
+        X_query_resized /= np.linalg.norm(X_query_resized)
         X_resized = X.dot(D)
         X_resized = X_resized / np.linalg.norm(X_resized, axis=1)[:, None]
-        dist = 1 - X_resized.dot(new_X_resized)
+        dist = 1 - X_resized.dot(X_query_resized)
     else:
         raise ValueError("Distance has to be similarity or euclidean")
     return np.argpartition(dist, k)[:k]
