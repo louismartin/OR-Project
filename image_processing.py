@@ -2,6 +2,7 @@ import math
 import os.path as op
 import time
 
+import matplotlib.pyplot as plt
 import numpy as np
 from pycocotools.coco import COCO
 from scipy import misc
@@ -15,6 +16,16 @@ ann_file = op.join(
     data_dir, "annotations", "instances_{0}.json".format(data_type))
 output_shape = (224, 224, 3)
 categories = ["snowboard", "boat", "giraffe"]
+
+
+def plot_image_by_id(img_id, coco):
+    img = coco.loadImgs(img_id)[0]
+    img_path = op.join(data_dir, data_type, img["file_name"])
+    img_mat = misc.imread(img_path)
+    plt.figure()
+    plt.axis('off')
+    plt.imshow(img_mat)
+    plt.show()
 
 
 def process_image(img_path):
